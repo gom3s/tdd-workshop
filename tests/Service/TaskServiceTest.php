@@ -3,6 +3,8 @@
 namespace App\Test\Service;
 
 
+use App\Domain\Task\Task;
+use App\Domain\Service\TaskService;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -15,7 +17,15 @@ class TaskServiceTest extends TestCase
 {
     public function testServiceReturnsListOfTasks()
     {
-        // List open tasks sorted newest to oldest
+        $service = new TaskService();
+        $task = $this->prophesize(Task::class)->reveal();
+        $service->addTask($task);
+
+        $list = $service->getTasks();
+
+        $this->assertNotEmpty($list);
+        $this->assertInternalType('array', $list);
+        $this->assertGreaterThan(0, count($list));
     }
 
     public function testServiceCanAddNewTask()
